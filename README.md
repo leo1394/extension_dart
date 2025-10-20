@@ -27,6 +27,7 @@ Language: English | [中文](README-ZH.md)
 Import
 ```dart
 import 'package:extension_dart/extensions.dart';
+import 'package:extension_dart/utils.dart';
 ``` 
 
 ### Double
@@ -85,6 +86,7 @@ import 'package:extension_dart/extensions.dart';
   /// 'Hello'.bytesChunks(2) ;  // [[72, 101], [108, 108], [111]]
   /// "hello".capitalize(); // return Hello
   /// "{}".isJson 
+  /// "?id=&search=".isQuery 
   /// "test@gmail.com".isEmail 
   /// "xxxxxxxx".isCreditCard 
   /// "dk9KK_ee83".isStrongPassword 

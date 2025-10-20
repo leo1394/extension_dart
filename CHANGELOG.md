@@ -1,3 +1,6 @@
+## 1.0.3
+- support `isQuery` for string
+
 ## 1.0.2
 - Tiny tuned
 

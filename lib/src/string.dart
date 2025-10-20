@@ -30,6 +30,22 @@ extension StringExtension on String {
     }
   }
 
+  /// Validates URL query string (handles ? & # fragments, allows empty values)
+  bool get isQuery {
+    // Extract query part: "?key=value&test=123"
+    final queryMatch = RegExp(r'\?([^#]*)').firstMatch(this);
+    if (queryMatch == null) return false;
+
+    final query = queryMatch.group(1)!;
+    if (query.isEmpty) return false;
+
+    // Split & validate: key MUST exist, value CAN be empty
+    return query.split('&').every((pair) {
+      final parts = pair.split('=');
+      return parts.length == 2 && parts[0].isNotEmpty; // ← Empty value OK!
+    });
+  }
+
   /// Returns true if string is a file
   bool isValidFileExtension(String filename, {List<String>? allowed}) {
     final extensions = allowed ?? ['.jpg', '.jpeg', '.png', '.pdf', '.docx'];
