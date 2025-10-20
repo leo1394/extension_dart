@@ -1,5 +1,5 @@
-import 'package:dart_extension/extensions.dart';
-import 'package:dart_extension/src/utils.dart';
+import 'package:extension_dart/extensions.dart';
+import 'package:extension_dart/utils.dart';
 
 void main() {
   /* Double */

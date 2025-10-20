@@ -10,16 +10,6 @@
 A lightweight Dart extensions that simplify framework usage for elegant, effortless app development.
 ## Key Features
 
-* Small weight
-* Simple usage
-* Many entities
-
-- `factory`：按 API URI 声明以所见即所得方式生成 AJAX 请求函数。
-- `mock`：在开发阶段，为指定请求从本地 JSON 文件返回模拟数据。
-- `silent`：为指定请求在遇到未授权或维护响应时抑制路由跳转。
-- `throttling`：当开启限流时，超量请求将排队（基于 async/await）以控制上传节奏。
-- 生成的请求 Future 函数可以通过链式访问。
-
 Language: English | [中文](README-ZH.md)
 ## Platform Support
 
