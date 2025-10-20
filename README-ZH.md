@@ -1,11 +1,11 @@
 
-## dart_extension
-[![pub package](https://img.shields.io/pub/v/dart_extension.svg)](https://pub.dev/packages/dart_extension)
-[![pub points](https://img.shields.io/pub/points/dart_extension?color=2E8B57&label=pub%20points)](https://pub.dev/packages/dart_extension/score)
-[![GitHub Issues](https://img.shields.io/github/issues/leo1394/dart_extension.svg?branch=master)](https://github.com/leo1394/dart_extension/issues)
-[![GitHub Forks](https://img.shields.io/github/forks/leo1394/dart_extension.svg?branch=master)](https://github.com/leo1394/dart_extension/network)
-[![GitHub Stars](https://img.shields.io/github/stars/leo1394/dart_extension.svg?branch=master)](https://github.com/leo1394/dart_extension/stargazers)
-[![GitHub License](https://img.shields.io/badge/license-MIT%20-blue.svg)](https://raw.githubusercontent.com/leo1394/dart_extension/master/LICENSE)
+## extension_dart
+[![pub package](https://img.shields.io/pub/v/extension_dart.svg)](https://pub.dev/packages/extension_dart)
+[![pub points](https://img.shields.io/pub/points/extension_dart?color=2E8B57&label=pub%20points)](https://pub.dev/packages/extension_dart/score)
+[![GitHub Issues](https://img.shields.io/github/issues/leo1394/extension_dart.svg?branch=master)](https://github.com/leo1394/extension_dart/issues)
+[![GitHub Forks](https://img.shields.io/github/forks/leo1394/extension_dart.svg?branch=master)](https://github.com/leo1394/extension_dart/network)
+[![GitHub Stars](https://img.shields.io/github/stars/leo1394/extension_dart.svg?branch=master)](https://github.com/leo1394/extension_dart/stargazers)
+[![GitHub License](https://img.shields.io/badge/license-MIT%20-blue.svg)](https://raw.githubusercontent.com/leo1394/extension_dart/master/LICENSE)
 
 A lightweight Dart extensions that simplify framework usage for elegant, effortless app development.
 
@@ -26,7 +26,7 @@ Language: 中文 | [English](README.md)
 ## 快速上手
 Import
 ```dart
-import 'package:dart_extension/extensions.dart';
+import 'package:extension_dart/extensions.dart';
 ``` 
 
 ### Double
