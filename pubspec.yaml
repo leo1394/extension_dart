@@ -1,0 +1,14 @@
+name: dart_extension
+description: A sample command-line application.
+version: 1.0.0
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ^3.6.1
+
+# Add regular dependencies here.
+dependencies:
+  meta: ^1.8.0
+
+dev_dependencies:
+  test: ^1.24.0
