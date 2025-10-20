@@ -1,7 +1,9 @@
 name: dart_extension
-description: A sample command-line application.
+description: A lightweight Dart extensions that simplify framework usage for elegant, effortless app development.
+homepage: https://github.com/leo1394/dart_extension
+repository: https://github.com/leo1394/dart_extension
+issue_tracker: https://github.com/leo1394/dart_extension/issues
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
 
 environment:
   sdk: ^3.6.1
@@ -12,3 +14,10 @@ dependencies:
 
 dev_dependencies:
   test: ^1.24.0
+
+topics:
+  - dart-extension
+  - extension
+  - extensions
+  - dart-extensions
+  - mock-response

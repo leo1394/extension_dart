@@ -1,8 +1,9 @@
 import 'string.dart';
-num Function(dynamic) identity = (dynamic e) => e is num ? e : (e.toString().digits() ?? 0);
+
+num Function(dynamic) identity =
+    (dynamic e) => e is num ? e : (e.toString().digits() ?? 0);
 
 extension IterableFindExtension<E> on Iterable<E> {
-
   /// find the first element that satisfies the given predicate [test].
   ///
   /// Iterates through elements and returns the first to satisfy [test].
@@ -45,7 +46,7 @@ extension IterableFindExtension<E> on Iterable<E> {
   int findIndex(bool Function(E element) test) {
     int index = -1;
     for (E element in this) {
-      index ++;
+      index++;
       if (test(element)) return index;
     }
     return 0;
@@ -66,13 +67,14 @@ extension IterableFindExtension<E> on Iterable<E> {
   /// print(numbers.flat()); // (1, 2, [7, 8], 3, 5)
   /// print(numbers.flat(depth: 2)); // (1, 2, 7, 8, 3, 5)
   /// ```
-  Iterable<E> flat<E>({int? depth, dynamic Function(dynamic e)? toElements}) sync* {
+  Iterable<E> flat<E>(
+      {int? depth, dynamic Function(dynamic e)? toElements}) sync* {
     toElements ??= (dynamic e) => e;
     depth ??= 1;
     for (var element in this) {
       if (depth > 0) {
         final extracted = toElements(element);
-        if(extracted is! Iterable) {
+        if (extracted is! Iterable) {
           yield extracted;
           continue;
         }
@@ -163,5 +165,19 @@ extension IterableFindExtension<E> on Iterable<E> {
     }
 
     return minElement;
+  }
+
+  /// Split one large list to limited sub lists
+  /// ```dart
+  /// [1, 2, 3, 4, 5, 6, 7, 8, 9].chunks(2)
+  /// // => [[1, 2], [3, 4], [5, 6], [7, 8], [9]]
+  /// ```
+  Iterable<List<E>> chunks(int chunkSize) sync* {
+    final len = this.length;
+
+    for (int i = 0; i < len; i += chunkSize) {
+      final start = i > len ? i - len : i;
+      yield skip(start).take(chunkSize).toList();
+    }
   }
 }

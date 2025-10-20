@@ -8,32 +8,22 @@
 [![GitHub License](https://img.shields.io/badge/license-MIT%20-blue.svg)](https://raw.githubusercontent.com/leo1394/dart_extension/master/LICENSE)
 
 A lightweight Dart extensions that simplify framework usage for elegant, effortless app development.
-## Key Features
 
-* Small weight
-* Simple usage
-* Many entities
-
-- `factory`：按 API URI 声明以所见即所得方式生成 AJAX 请求函数。
-- `mock`：在开发阶段，为指定请求从本地 JSON 文件返回模拟数据。
-- `silent`：为指定请求在遇到未授权或维护响应时抑制路由跳转。
-- `throttling`：当开启限流时，超量请求将排队（基于 async/await）以控制上传节奏。
-- 生成的请求 Future 函数可以通过链式访问。
-
-Language: English | [中文](README-ZH.md)
-## Platform Support
+Language: 中文 | [English](README.md)
+## 平台支持
 
 | Android | iOS | MacOS | Web | Linux | Windows |
 | :-----: | :-: | :---: |:---:| :---: | :-----: |
 |   ✅    | ✅  |  ✅   |  ✅  |  ✅   |   ✅    |
 
-## Requirements
+## 依赖要求
 
 - Flutter >=3.0.0 <4.0.0
 - Dart: ^2.17.0
 - meta: ^1.8.0
 
-## Getting started
+
+## 快速上手
 Import
 ```dart
 import 'package:dart_extension/extensions.dart';
@@ -43,8 +33,8 @@ import 'package:dart_extension/extensions.dart';
 
 ```dart
   double value = 3.1415926;
-  print(value.fixed(decimals: 3)); // 3.141
-  print(value.fixed(decimals: 3, round: true)); // 3.142
+print(value.fixed(decimals: 3)); // 3.141
+print(value.fixed(decimals: 3, round: true)); // 3.142
 
 ```
 
@@ -163,5 +153,5 @@ print(time.toString()); // 15:30:00.000000
 ```
 
 
-## Additional information
-Feel free to file an issue if you have any problem.
+## 其他信息
+如有问题，欢迎提交 Issue。

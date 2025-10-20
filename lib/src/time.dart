@@ -56,21 +56,21 @@ class Time implements Comparable<Time> {
   /// Creates a `Time` with the given time.
   @literal
   const Time(
-      this.hour, [
-        this.minute = 0,
-        this.second = 0,
-        this.millisecond = 0,
-        this.microsecond = 0,
-      ])  : assert(hour >= 0 && hour < 24,
-  'Invalid hour: $hour, hour must be between 0 and 23'),
+    this.hour, [
+    this.minute = 0,
+    this.second = 0,
+    this.millisecond = 0,
+    this.microsecond = 0,
+  ])  : assert(hour >= 0 && hour < 24,
+            'Invalid hour: $hour, hour must be between 0 and 23'),
         assert(minute >= 0 && minute < 60,
-        'Invalid minute: $minute, minute must be between 0 and 59'),
+            'Invalid minute: $minute, minute must be between 0 and 59'),
         assert(second >= 0 && second < 60,
-        'Invalid second: $second, second must be between 0 and 59'),
+            'Invalid second: $second, second must be between 0 and 59'),
         assert(millisecond >= 0 && millisecond < 1000,
-        'Invalid millisecond: $millisecond, millisecond must be between 0 and 999'),
+            'Invalid millisecond: $millisecond, millisecond must be between 0 and 999'),
         assert(microsecond >= 0 && microsecond < 1000,
-        'Invalid microsecond: $microsecond, microsecond must be between 0 and 999');
+            'Invalid microsecond: $microsecond, microsecond must be between 0 and 999');
 
   /// Adds the given [duration] to this time. A [RangeError] is thrown if the resultant
   /// time is less than [min] or greater than [max].
@@ -114,33 +114,21 @@ class Time implements Comparable<Time> {
 
   /// Returns Time from DateTime
   Time from({DateTime? dateTime, int? seconds}) {
-    assert((dateTime == null && seconds != null) || (dateTime != null && seconds == null));
-    if(seconds != null) {
-      return Time(
-          (seconds ~/ 3600),
-          ((seconds % 3600) ~/ 60),
-          (seconds % 60)
-      );
+    assert((dateTime == null && seconds != null) ||
+        (dateTime != null && seconds == null));
+    if (seconds != null) {
+      return Time((seconds ~/ 3600), ((seconds % 3600) ~/ 60), (seconds % 60));
     }
     dateTime ??= DateTime.now();
-    return Time(
-        dateTime.hour,
-        dateTime.minute,
-        dateTime.second,
-        dateTime.millisecond,
-        dateTime.microsecond
-    );
+    return Time(dateTime.hour, dateTime.minute, dateTime.second,
+        dateTime.millisecond, dateTime.microsecond);
   }
 
+  /// Returns Time from DateTime.now()
   Time now() {
     DateTime dateTime = DateTime.now();
-    return Time(
-        dateTime.hour,
-        dateTime.minute,
-        dateTime.second,
-        dateTime.millisecond,
-        dateTime.microsecond
-    );
+    return Time(dateTime.hour, dateTime.minute, dateTime.second,
+        dateTime.millisecond, dateTime.microsecond);
   }
 
   /// Returns the difference between this and [other].

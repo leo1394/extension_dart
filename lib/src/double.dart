@@ -1,4 +1,5 @@
 import 'dart:math';
+
 /// Utilities for formatting double.
 extension DoubleExtension on double {
   /// Formats a double to a specific number of decimal places, with an option to round.
@@ -13,7 +14,7 @@ extension DoubleExtension on double {
   /// ### Code of Practice:
   ///
   /// ```dart
-  /// double value = 3.14159;
+  /// double value = 3.1415926;
   /// // **1. Default behavior (2 decimal places, no rounding):**
   ///
   /// var result = value.fixed(); // 3.14
@@ -30,10 +31,14 @@ extension DoubleExtension on double {
   ///
   /// ```
   dynamic fixed({int? decimals = 2, bool? round = false}) {
-    if(decimals == null) {decimals = 2;}
-    if(round == null) {round = false;}
+    if (decimals == null) {
+      decimals = 2;
+    }
+    if (round == null) {
+      round = false;
+    }
     double result = this;
-    if(round) {
+    if (round) {
       int factor = pow(10, decimals).toInt();
       result = (this * factor).round() / factor;
     }

@@ -1,8 +1,8 @@
-import 'package:dart_extension/dart_extension.dart';
+import 'package:dart_extension/extensions.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('calculate', () {
-
+  test('seconds timer', () {
+    print((90).timer());
   });
 }

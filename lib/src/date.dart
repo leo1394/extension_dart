@@ -1,52 +1,37 @@
 import 'time.dart';
+import 'utils.dart';
 
 extension DateExtension on DateTime {
-  /// Tomorrow at same hour / minute / second than now
-  static DateTime get tomorrow => DateTime.now().nextDay;
-
-  /// Yesterday at same hour / minute / second than now
-  static DateTime get yesterday => DateTime.now().previousDay;
-
-  /// Current date (Same as [Date.now])
-  static DateTime get today => DateTime.now();
-
-  static DateTime get endOfDay {
-    DateTime now = DateTime.now();
-    return DateTime(now.year, now.month, now.day, 23, 59, 59, 999, 999);
+  /// Returns the end of Current date
+  DateTime get endOfDay {
+    return DateTime(year, month, day, 23, 59, 59, 999, 999);
   }
 
-  static DateTime get startOfDay {
-    DateTime now = DateTime.now();
-    return DateTime(now.year, now.month, now.day, 0, 0, 0, 0, 0);
-  }
-
-  /// Returns a [DateTime] for each day the given range.
-  ///
-  /// [start] inclusive
-  /// [end] exclusive
-  static Iterable<DateTime> daysInRange(DateTime start, DateTime end) sync* {
-    var i = start;
-    var offset = start.timeZoneOffset;
-    while (i.isBefore(end)) {
-      yield i;
-      i = i.addDays(1);
-      var timeZoneDiff = i.timeZoneOffset - offset;
-      if (timeZoneDiff.inSeconds != 0) {
-        offset = i.timeZoneOffset;
-        i = i.subtract(Duration(seconds: timeZoneDiff.inSeconds));
-      }
-    }
+  /// Returns the start of Current date
+  DateTime get startOfDay {
+    return DateTime(year, month, day, 0, 0, 0, 0, 0);
   }
 
   /// Returns a [DateTime] with the date of the original, but time set to
   /// midnight.
   DateTime get dateOnly => DateTime(this.year, this.month, this.day);
 
+  /// Returns only the time.
+  Time get timeOnly => Time(
+        hour,
+        minute,
+        second,
+        millisecond,
+        microsecond,
+      );
+
+  /// Check if the date is today
   bool get isToday {
     final nowDate = DateTime.now();
     return year == nowDate.year && month == nowDate.month && day == nowDate.day;
   }
 
+  /// Check if the date is yesterday
   bool get isYesterday {
     final nowDate = DateTime.now();
     return year == nowDate.year &&
@@ -54,6 +39,7 @@ extension DateExtension on DateTime {
         day == nowDate.day - 1;
   }
 
+  /// Check if the date is tomorrow
   bool get isTomorrow {
     final nowDate = DateTime.now();
     return year == nowDate.year &&
@@ -63,27 +49,27 @@ extension DateExtension on DateTime {
 
   /// Add a certain amount of days to this date
   DateTime addDays(int amount) => DateTime(
-    year,
-    month,
-    day + amount,
-    hour,
-    minute,
-    second,
-    millisecond,
-    microsecond,
-  );
+        year,
+        month,
+        day + amount,
+        hour,
+        minute,
+        second,
+        millisecond,
+        microsecond,
+      );
 
   /// Add a certain amount of hours to this date
   DateTime addHours(int amount) => DateTime(
-    year,
-    month,
-    day,
-    hour + amount,
-    minute,
-    second,
-    millisecond,
-    microsecond,
-  );
+        year,
+        month,
+        day,
+        hour + amount,
+        minute,
+        second,
+        millisecond,
+        microsecond,
+      );
 
   /// The day after this [DateTime]
   DateTime get nextDay => addDays(1);
@@ -110,15 +96,19 @@ extension DateExtension on DateTime {
     }
 
     var lastToDisplay = last.add(Duration(days: daysAfter));
-    return daysInRange(firstToDisplay, lastToDisplay).toList();
+    return Utils.daysInRange(firstToDisplay, lastToDisplay).toList();
   }
 
+  /// Check if the first day of a month
   bool get isFirstDayOfMonth => isSameDay(firstDayOfMonth);
 
+  /// Check if the last day of a month
   bool get isLastDayOfMonth => isSameDay(lastDayOfMonth);
 
+  /// Returns the first day of a given month
   DateTime get firstDayOfMonth => DateTime(this.year, this.month);
 
+  /// Returns the first day of week
   DateTime get firstDayOfWeek {
     /// Handle Daylight Savings by setting hour to 12:00 Noon
     /// rather than the default of Midnight
@@ -130,6 +120,7 @@ extension DateExtension on DateTime {
     return this.subtract(Duration(days: decreaseNum));
   }
 
+  /// Returns the last day of week
   DateTime get lastDayOfWeek {
     /// Handle Daylight Savings by setting hour to 12:00 Noon
     /// rather than the default of Midnight
@@ -149,6 +140,7 @@ extension DateExtension on DateTime {
     return beginningNextMonth.subtract(Duration(days: 1));
   }
 
+  /// Returns the previous month
   DateTime get previousMonth {
     var year = this.year;
     var month = this.month;
@@ -161,6 +153,7 @@ extension DateExtension on DateTime {
     return DateTime(year, month);
   }
 
+  /// Returns the next month
   DateTime get nextMonth {
     var year = this.year;
     var month = this.month;
@@ -174,10 +167,13 @@ extension DateExtension on DateTime {
     return DateTime(year, month);
   }
 
+  /// Returns the last week
   DateTime get previousWeek => this.subtract(Duration(days: 7));
 
+  /// Returns the next week
   DateTime get nextWeek => this.add(Duration(days: 7));
 
+  /// Check if the date is on the same week for a given date
   bool isSameWeek(DateTime b) {
     /// Handle Daylight Savings by setting hour to 12:00 Noon
     /// rather than the default of Midnight
@@ -194,13 +190,4 @@ extension DateExtension on DateTime {
     final result = max.weekday % 7 - min.weekday % 7 >= 0;
     return result;
   }
-
-  /// Returns only the time.
-  Time get time => Time(
-    hour,
-    minute,
-    second,
-    millisecond,
-    microsecond,
-  );
 }

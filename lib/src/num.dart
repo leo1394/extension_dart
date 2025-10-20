@@ -1,4 +1,5 @@
 import 'time.dart';
+import 'dart:math' as math;
 
 /// Utilities for formatting numbers.
 extension NumExtension<T extends num> on T {
@@ -15,7 +16,7 @@ extension NumExtension<T extends num> on T {
   /// Returns `true` if `this` is between the given [min] (inclusive) and [max] (exclusive).
   bool between(num min, num max) {
     assert(min <= max,
-    'Invalid bounds: $min and $max, min cannot be greater than max');
+        'Invalid bounds: $min and $max, min cannot be greater than max');
     return min <= this && this < max;
   }
 
@@ -23,9 +24,39 @@ extension NumExtension<T extends num> on T {
   /// [max] (exclusive).
   bool outside(num min, num max) {
     assert(min <= max,
-    'Invalid bounds: $min and $max, min cannot be greater than max');
+        'Invalid bounds: $min and $max, min cannot be greater than max');
     return this < min || this > max;
   }
+
+  /// Convert degrees to radians
+  double get radians => this * math.pi / 180.0;
+
+  /// Convert radians to degree
+  double get degrees => this * 180.0 / math.pi;
+
+  /// Convert celsius to fahrenheit
+  double get fahrenheit => (this * 9 / 5) + 32.0;
+
+  /// Convert fahrenheit to celsius
+  double get celsius => (this - 32.0) * 5 / 9;
+
+  /// Convert miles to kilometers
+  double get kilometers => this * 1.60934;
+
+  /// Convert kilometers to miles
+  double get miles => this / 1.60934;
+
+  /// Convert grams to carats
+  double get carats => this * 5.0;
+
+  /// Convert grams to ounces
+  double get ounces => this / 28.34952;
+
+  /// From Carats to grams
+  double get caratsToGrams => this / 5.0;
+
+  /// From Ounces to grams
+  double get ouncesToGrams => this * 28.34952;
 
   /// Converts a number representing total seconds into a time-formatted string.
   ///
@@ -78,11 +109,14 @@ extension NumExtension<T extends num> on T {
       if (!RegExp(r'^[+-]?([\d]+|[\d]+\.[\d]+)$').hasMatch(this.toString())) {
         return this.toString();
       }
-      return this.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => ',');
+      return this
+          .toString()
+          .replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => ',');
     } catch (e) {
       return this.toString();
     }
   }
+
   /// Converts a number into a percentage string.
   ///
   /// The number is multiplied by 100 and a '%' sign is appended.
