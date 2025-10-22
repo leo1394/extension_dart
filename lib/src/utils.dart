@@ -1,6 +1,5 @@
 import 'dart:math';
-import 'package:extension_dart/extensions.dart';
-
+import 'extensions/num.dart';
 import 'extensions/date.dart';
 
 class Utils {
