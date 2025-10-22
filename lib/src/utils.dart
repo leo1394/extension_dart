@@ -1,5 +1,7 @@
 import 'dart:math';
-import 'date.dart';
+import 'package:extension_dart/extensions.dart';
+
+import 'extensions/date.dart';
 
 class Utils {
   /// Generate fast uuid with supports for prefix and with dashes or not
@@ -152,4 +154,14 @@ class Utils {
       }
     }
   }
+
+  /// Returns true if is yesterday, otherwise false
+  static bool isYesterday(int current) =>
+      current.millisecondsToDateTime.isYesterday;
+
+  /// Returns true if is tomorrow, otherwise false
+  static bool isTomorrow(DateTime date) => date.isTomorrow;
+
+  /// Returns true if is today, otherwise false
+  static bool isToday(DateTime date) => date.isToday;
 }

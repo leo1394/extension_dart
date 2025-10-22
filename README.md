@@ -8,7 +8,6 @@
 [![GitHub License](https://img.shields.io/badge/license-MIT%20-blue.svg)](https://raw.githubusercontent.com/leo1394/extension_dart/master/LICENSE)
 
 A lightweight Dart extensions that simplify framework usage for elegant, effortless app development.
-## Key Features
 
 Language: English | [中文](README-ZH.md)
 ## Platform Support

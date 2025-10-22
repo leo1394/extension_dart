@@ -37,7 +37,10 @@ class Time implements Comparable<Time> {
 
   /// The end of the day (11:59:59:999:999 pm).
   static const max = Time(23, 59, 59, 999, 999);
-
+  
+  /// Regex to parse time string
+  static final RegExp _parseFormat= RegExp(r'^(\d\d?)((?::?(\d\d?))?(?::?(\d\d?)(?:[.,](\d+))?))?'); // Time
+  
   /// The hour.
   final int hour;
 
@@ -110,6 +113,53 @@ class Time implements Comparable<Time> {
       milliseconds,
       microseconds,
     );
+  }
+
+  /// Constructs a new [Time] instance based on [formattedString].
+  ///
+  /// Works like [parse] except that this function returns `null`
+  /// where [parse] would throw a [FormatException].
+  static Time? tryParse(String formattedString) {
+    // TODO: Optimize to avoid throwing.
+    try {
+      return parse(formattedString);
+    } on FormatException {
+      return null;
+    }
+  }
+
+  /// Constructs a new [Time] instance based on [formattedString].
+  ///
+  /// Throws a [FormatException] if the input string cannot be parsed.
+  /// 
+  /// [formattedString]: The string to parse.
+  /// Has format: HH:MM:SS.mmm.uuu
+  /// Example: 12:34:56.789012
+  /// Example: 12:34:56.789
+  /// Example: 12:34:56
+  /// Example: 12:34.789012
+  /// Example: 12:34.789
+  /// Example: 12:34
+  /// Example: 12
+  /// Returns the [Time] instance.  
+  static Time parse(String formattedString) {
+    if(_parseFormat.hasMatch(formattedString)) {
+      List<int> smh = [0,0,0]; // [second, minute, hour]
+      int millisecond = 0;
+      int microsecond = 0;
+      // final match = _parseFormat.firstMatch(formattedString)!;
+      if(formattedString.contains('.')) {
+        final parts = formattedString.split('.');
+        millisecond = int.parse(parts.last) ~/ 1000;
+        microsecond = int.parse(parts.last) % 1000;
+        smh = [... formattedString.split('.').first.split(':').reversed.map(int.parse).toList(), ... List.generate(3 - formattedString.split('.').first.split(':').length, (idx) => 0)];
+      }else {
+        smh = [... List.generate(3 - formattedString.split(':').length, (idx) => 0), ... formattedString.split(':').map(int.parse).toList()];
+      }
+
+      return Time(smh[2], smh[1], smh[0], millisecond, microsecond);
+    }
+    throw FormatException('Invalid time format: $formattedString');
   }
 
   /// Returns Time from DateTime

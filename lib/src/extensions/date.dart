@@ -1,5 +1,6 @@
+import '../date_format.dart';
+import '../utils.dart';
 import 'time.dart';
-import 'utils.dart';
 
 extension DateExtension on DateTime {
   /// Returns the end of Current date
@@ -25,26 +26,33 @@ extension DateExtension on DateTime {
         microsecond,
       );
 
+  /// Returns date formatted string with support for custom format
+  String format([String? format]) {
+    return DateFormat(format ?? 'yyyy-MM-dd').format(this);
+  }
+
   /// Check if the date is today
   bool get isToday {
     final nowDate = DateTime.now();
     return year == nowDate.year && month == nowDate.month && day == nowDate.day;
   }
 
-  /// Check if the date is yesterday
+  /// Check if the date is yesterday, consider gap of year, month, day
   bool get isYesterday {
     final nowDate = DateTime.now();
-    return year == nowDate.year &&
-        month == nowDate.month &&
-        day == nowDate.day - 1;
+    final yesterdayDate = nowDate.subtract(Duration(days: 1));
+    return year == yesterdayDate.year &&
+        month == yesterdayDate.month &&
+        day == yesterdayDate.day;
   }
 
   /// Check if the date is tomorrow
   bool get isTomorrow {
     final nowDate = DateTime.now();
-    return year == nowDate.year &&
-        month == nowDate.month &&
-        day == nowDate.day + 1;
+    final tomorrowDate = nowDate.add(Duration(days: 1));
+    return year == tomorrowDate.year &&
+        month == tomorrowDate.month &&
+        day == tomorrowDate.day;
   }
 
   /// Add a certain amount of days to this date

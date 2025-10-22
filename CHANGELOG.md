@@ -1,3 +1,7 @@
+## 1.0.4
+- add `tryParse` for `Time`
+- support `DateFormat` for DateTime
+
 ## 1.0.3
 - support `isQuery` for string
 

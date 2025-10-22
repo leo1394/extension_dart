@@ -3,11 +3,11 @@
 
 library;
 
-export 'src/date.dart';
-export 'src/double.dart';
-export 'src/iterable.dart';
-export 'src/list.dart';
-export 'src/map.dart';
-export 'src/num.dart';
-export 'src/string.dart';
-export 'src/time.dart';
+export 'src/extensions/date.dart';
+export 'src/extensions/double.dart';
+export 'src/extensions/iterable.dart';
+export 'src/extensions/list.dart';
+export 'src/extensions/map.dart';
+export 'src/extensions/num.dart';
+export 'src/extensions/string.dart';
+export 'src/extensions/time.dart';

@@ -28,6 +28,14 @@ extension NumExtension<T extends num> on T {
     return this < min || this > max;
   }
 
+  /// Convert milliseconds to DateTime
+  DateTime get millisecondsToDateTime =>
+      DateTime.fromMillisecondsSinceEpoch(this.toInt());
+
+  /// Convert milliseconds to UTCDateTime
+  DateTime get millisecondsToUTCDateTime =>
+      DateTime.fromMillisecondsSinceEpoch(this.toInt(), isUtc: true);
+
   /// Convert degrees to radians
   double get radians => this * math.pi / 180.0;
 
