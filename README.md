@@ -64,14 +64,12 @@ import 'package:extension_dart/utils.dart';
 
 ```
 
-### String
+### String?
 
 ```dart
-  print("3.1415926".digits()); // 3.1415926
-
-  print("4.56%".digits()); // 0.456
-
-  print("-1.e3".digits()); // -1000.0
+  print("3.1415926".numeric()); // 3.1415926
+  print("4.56%".numeric()); // 0.456
+  print("-1.e3".numeric()); // -1000.0
 
   print("hello world".toCamelCase()); // helloWorld
   print("HelloWorld".toSnakeCase()); // hello_world
@@ -89,6 +87,11 @@ import 'package:extension_dart/utils.dart';
   /// "test@gmail.com".isEmail 
   /// "xxxxxxxx".isCreditCard 
   /// "dk9KK_ee83".isStrongPassword 
+  /// "王伟".isChineseFullName; // true
+  /// "CP2756344".isDEANumberOfUS; // true
+  /// "XXX-XX-XXXX".isSSNofUS; // false
+  /// "+1 (234) 567-8901".isPhoneNumberOfUS; // true 
+
 ```
 
 ### Map<String, T>
@@ -131,6 +134,7 @@ import 'package:extension_dart/utils.dart';
   print(now.isToday); // true
   print(now.timeOnly.toString()); // 11:56:23.647266
   print(now.addDays(1).dateOnly); // 2025/10/21
+  print(now.formatted); // 2025-10-21
 ```
 
 #### Time

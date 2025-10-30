@@ -1,3 +1,7 @@
+## 1.0.5
+- add some extension api for `String?` 
+- add `formatted` for `DateTime` 
+
 ## 1.0.4
 - add `tryParse` for `Time`
 - support `DateFormat` for DateTime

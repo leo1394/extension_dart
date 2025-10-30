@@ -1,7 +1,7 @@
 import 'string.dart';
 
 num Function(dynamic) identity =
-    (dynamic e) => e is num ? e : (e.toString().digits() ?? 0);
+    (dynamic e) => e is num ? e : (e.toString().numeric() ?? 0);
 
 extension IterableFindExtension<E> on Iterable<E> {
   /// find the first element that satisfies the given predicate [test].

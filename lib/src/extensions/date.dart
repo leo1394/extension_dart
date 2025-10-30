@@ -31,6 +31,9 @@ extension DateExtension on DateTime {
     return DateFormat(format ?? 'yyyy-MM-dd').format(this);
   }
 
+  /// Return date formatted string
+  String get formatted => this.format();
+
   /// Check if the date is today
   bool get isToday {
     final nowDate = DateTime.now();

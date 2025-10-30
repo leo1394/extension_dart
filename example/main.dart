@@ -16,11 +16,11 @@ void main() {
 
   /* String */
 
-  print("3.1415926".digits()); // 3.1415926
+  print("3.1415926".numeric()); // 3.1415926
 
-  print("4.56%".digits()); // 0.456
+  print("4.56%".numeric()); // 0.456
 
-  print("-1.e3".digits()); // -1000.0
+  print("-1.e3".numeric()); // -1000.0
 
   print("hello world".toCamelCase()); // helloWorld
   print("Hello World".toSnakeCase()); // hello_world
@@ -36,6 +36,11 @@ void main() {
   "{}".isJson; // true
   "test@gmail.com".isEmail; // true
   "xxxxxxxx".isCreditCard; // false
+  "11010219900101××××".isChineseIdNumber; // false
+  "王伟".isChineseFullName; // true
+  "CP2756344".isDEANumberOfUS; // true
+  "XXX-XX-XXXX".isSSNofUS; // false
+  "+1 (234) 567-8901".isPhoneNumberOfUS; // true
   "dZ9GK_ee83".isStrongPassword; // true
 
   /* Map */
