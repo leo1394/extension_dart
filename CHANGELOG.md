@@ -1,3 +1,8 @@
+## 1.0.6
+- add `fix` `permille` `permyriad` extension api for `Num`
+- `format` for `DateFormat` support default current DateTime
+- support permille and permyriad format in `numeric` extension of `String?`
+
 ## 1.0.5
 - add some extension api for `String?` 
 - add `formatted` for `DateTime` 

@@ -1,16 +1,13 @@
 /// Date format class for formatting dates
 class DateFormat {
-  final String _pattern;
-
-  DateFormat(this._pattern);
-
   /// Format a DateTime using the pattern
-  String format(DateTime dateTime) {
-    return _formatDateTime(dateTime, _pattern);
+  static String format([DateTime? dateTime, String pattern = 'yyyy-MM-dd']) {
+    dateTime ??= DateTime.now();
+    return _formatDateTime(dateTime, pattern);
   }
 
   /// Format DateTime with the given pattern
-  String _formatDateTime(DateTime dateTime, String pattern) {
+  static String _formatDateTime(DateTime dateTime, String pattern) {
     String result = pattern;
 
     // Year patterns
@@ -73,12 +70,12 @@ class DateFormat {
   }
 
   /// Pad string with zeros on the left
-  String _padLeft(String value, int width) {
+  static String _padLeft(String value, int width) {
     return value.padLeft(width, '0');
   }
 
   /// Get full month name
-  String _getMonthName(int month) {
+  static String _getMonthName(int month) {
     const months = [
       'January',
       'February',
@@ -97,7 +94,7 @@ class DateFormat {
   }
 
   /// Get short month name
-  String _getShortMonthName(int month) {
+  static String _getShortMonthName(int month) {
     const months = [
       'Jan',
       'Feb',
@@ -116,7 +113,7 @@ class DateFormat {
   }
 
   /// Get full weekday name
-  String _getWeekdayName(int weekday) {
+  static String _getWeekdayName(int weekday) {
     const weekdays = [
       'Monday',
       'Tuesday',
@@ -130,25 +127,34 @@ class DateFormat {
   }
 
   /// Get short weekday name
-  String _getShortWeekdayName(int weekday) {
+  static String _getShortWeekdayName(int weekday) {
     const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     return weekdays[weekday - 1];
   }
 
   // Predefined formatters
-  static DateFormat yMd() => DateFormat('y/M/d');
-  static DateFormat yMMMd() => DateFormat('MMM d, y');
-  static DateFormat yMMMMEEEEd() => DateFormat('EEEE, MMMM d, y');
-  static DateFormat yMMMEd() => DateFormat('EEE, MMM d, y');
-  static DateFormat Hms() => DateFormat('H:mm:ss');
-  static DateFormat Hm() => DateFormat('H:mm');
-  static DateFormat hms() => DateFormat('h:mm:ss a');
-  static DateFormat hm() => DateFormat('h:mm a');
-  static DateFormat ms() => DateFormat('m:ss');
-  static DateFormat y() => DateFormat('y');
-  static DateFormat M() => DateFormat('M');
-  static DateFormat d() => DateFormat('d');
-  static DateFormat H() => DateFormat('H');
-  static DateFormat m() => DateFormat('m');
-  static DateFormat s() => DateFormat('s');
+  static String yMd([DateTime? datetime]) =>
+      DateFormat.format(datetime, 'y/M/d');
+  static String yMMMd([DateTime? datetime]) =>
+      DateFormat.format(datetime, 'MMM d, y');
+  static String yMMMMEEEEd([DateTime? datetime]) =>
+      DateFormat.format(datetime, 'EEEE, MMMM d, y');
+  static String yMMMEd([DateTime? datetime]) =>
+      DateFormat.format(datetime, 'EEE, MMM d, y');
+  static String Hms([DateTime? datetime]) =>
+      DateFormat.format(datetime, 'H:mm:ss');
+  static String HHmmss([DateTime? datetime]) =>
+      DateFormat.format(datetime, 'HH:mm:ss');
+  static String Hm([DateTime? datetime]) => DateFormat.format(datetime, 'H:mm');
+  static String hms([DateTime? datetime]) =>
+      DateFormat.format(datetime, 'h:mm:ss a');
+  static String hm([DateTime? datetime]) =>
+      DateFormat.format(datetime, 'h:mm a');
+  static String ms([DateTime? datetime]) => DateFormat.format(datetime, 'm:ss');
+  static String y([DateTime? datetime]) => DateFormat.format(datetime, 'y');
+  static String M([DateTime? datetime]) => DateFormat.format(datetime, 'M');
+  static String d([DateTime? datetime]) => DateFormat.format(datetime, 'd');
+  static String H([DateTime? datetime]) => DateFormat.format(datetime, 'H');
+  static String m([DateTime? datetime]) => DateFormat.format(datetime, 'm');
+  static String s([DateTime? datetime]) => DateFormat.format(datetime, 's');
 }

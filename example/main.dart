@@ -12,13 +12,16 @@ void main() {
   print((125).timer()); // '02:05'
 
   print((0.5).percentage(fit: true)); // '50%' (instead of '50.00%')
+  print((0.05).permille(fit: true)); // '50‰'
+  print((0.005).permyriad(fit: true)); // '50‱'
   print((0.501).percentage()); // '50.10%'
 
   /* String */
-
   print("3.1415926".numeric()); // 3.1415926
 
   print("4.56%".numeric()); // 0.456
+  print("4.56‰".numeric()); // 0.0456
+  print("4.56‱".numeric()); // 0.00456
 
   print("-1.e3".numeric()); // -1000.0
 

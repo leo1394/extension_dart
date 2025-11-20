@@ -49,7 +49,9 @@ print(value.fixed(decimals: 3, round: true)); // 3.142
   String percent = value.percentage(fit: true); // '50%' (instead of '50.00%')
 
   double anotherValue = 0.501;
-  String anotherPercent = anotherValue.percentage(); // '50.10%'
+  print(anotherValue.percentage()); // '50.10%'
+  print(anotherValue.permille()); // '50.10‰'
+  print(anotherValue.permyriad()); // '50.10‱'
 
     /// Other units conversion methods
     /// (90).radians
@@ -70,6 +72,8 @@ print(value.fixed(decimals: 3, round: true)); // 3.142
 ```dart
   print("3.1415926".numeric()); // 3.1415926
   print("4.56%".numeric()); // 0.456
+  print("4.56‰".numeric()); // 0.0456
+  print("4.56‱".numeric()); // 0.00456
   print("-1.e3".numeric()); // -1000.0
 
   print("hello world".toCamelCase()); // helloWorld

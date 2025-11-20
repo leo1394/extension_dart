@@ -125,6 +125,13 @@ extension NumExtension<T extends num> on T {
     }
   }
 
+  /// Fix fraction digits for num
+  num fixed([int fractionDigits = 6]) {
+    String formatted = this.toStringAsFixed(fractionDigits);
+    formatted = formatted.replaceAll(RegExp(r'\.[0]+$'), '');
+    return num.tryParse(formatted) ?? this;
+  }
+
   /// Converts a number into a percentage string.
   ///
   /// The number is multiplied by 100 and a '%' sign is appended.
@@ -165,5 +172,27 @@ extension NumExtension<T extends num> on T {
     }
 
     return '$formatted%';
+  }
+
+  /// Converts a number into a per mille string.
+  /// The number is multiplied by 1000 and a '‰' sign is appended.
+  String permille({int fixed = 2, bool fit = false}) {
+    String formatted = (this * 1000).toStringAsFixed(fixed);
+    if (fit) {
+      formatted = formatted.replaceAll(RegExp(r'\.[0]+$'), '');
+    }
+
+    return '$formatted‰';
+  }
+
+  /// Converts a number into a per myriad string.
+  /// The number is multiplied by 10000 and a '‱' sign is appended.
+  String permyriad({int fixed = 2, bool fit = false}) {
+    String formatted = (this * 10000).toStringAsFixed(fixed);
+    if (fit) {
+      formatted = formatted.replaceAll(RegExp(r'\.[0]+$'), '');
+    }
+
+    return '$formatted‱';
   }
 }

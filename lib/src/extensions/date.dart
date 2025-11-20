@@ -28,7 +28,7 @@ extension DateExtension on DateTime {
 
   /// Returns date formatted string with support for custom format
   String format([String? format]) {
-    return DateFormat(format ?? 'yyyy-MM-dd').format(this);
+    return DateFormat.format(this, format ?? 'yyyy-MM-dd HH:mm:ss');
   }
 
   /// Return date formatted string
