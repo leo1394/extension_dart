@@ -3,7 +3,7 @@ description: A lightweight Dart extensions that simplify framework usage for ele
 homepage: https://github.com/leo1394/extension_dart
 repository: https://github.com/leo1394/extension_dart
 issue_tracker: https://github.com/leo1394/extension_dart/issues
-version: 1.0.6
+version: 1.0.7
 
 environment:
   sdk: ^3.6.1

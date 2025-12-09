@@ -98,11 +98,22 @@ import 'package:extension_dart/utils.dart';
 
 ```
 
-### Map<String, T>
+### Map
 
 ```dart
   Map<String, dynamic> headers = {};
   final {"requestId": requestId, "silent": silent} = headers.destructure();
+
+  // use for Uri.https or http
+  final Map<String, dynamic> query = {
+  'name': 'John',
+  'age': 30,
+  'tags': ['dart', 'flutter'],  // List or Set
+  'active': true,
+  'filter': null,               // optional param
+  };
+
+  final Map<String, dynamic> queryParameters = query.asQueryParameters;
 
 ```
 
@@ -128,6 +139,34 @@ import 'package:extension_dart/utils.dart';
   [1, 2, 3, 4].min();  // 1
   [1, 2, 3, 4].average(); // 2.5
   [1, 2, 3, 4].chunks(3); // [[1, 2, 3], [4]]
+```
+
+### List<Future>
+```dart
+  final futures = [
+    http.get(Uri.parse('https://httpbin.org/delay/2')),
+    Future.delayed(Duration(seconds: 1), () => 999),
+    Future.delayed(Duration(seconds: 3), () => "Last one"),
+    Future.value("Instant"),
+    Future.error("Boom!"),
+    Future.value(CustomObject(name: "Test")),
+  ];
+
+final results = await futures.all(
+    delayMillis: 200, // optional stagger
+    onProgress: (done, total, current) {
+      print("Progress: $done/$total");
+    },
+    onAnySuccess: (value, index) {
+      print("Success [$index]: $value (${value.runtimeType})");
+    },
+    onAnyError: (error, stack, index) {
+      print("Failed [$index]: $error");
+    },
+);
+// results is List<dynamic> in exact original order
+print(results);
+// → [Response, 999, "Last one", "Instant", null, Instance of 'CustomObject']
 ```
 
 ### Date

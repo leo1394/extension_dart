@@ -1,3 +1,8 @@
+## 1.0.7
+- add `QueryParametersConversion` extension api for `Map`
+- `futureAll` support in `Utils`
+- `all` support in `Iterable<Future<E>>`
+
 ## 1.0.6
 - add `fix` `permille` `permyriad` extension api for `Num`
 - `format` for `DateFormat` support default current DateTime

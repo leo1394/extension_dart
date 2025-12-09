@@ -51,6 +51,17 @@ void main() {
   Map<String, dynamic> headers = {};
   final {"requestId": requestId, "silent": silent} = headers.destructure();
 
+  // use for Uri.https or http
+  final Map<String, dynamic> query = {
+    'name': 'John',
+    'age': 30,
+    'tags': ['dart', 'flutter'], // List or Set
+    'active': true,
+    'filter': null, // optional param
+  };
+
+  final Map<String, dynamic> queryParameters = query.asQueryParameters;
+
   /* Iterate or List */
 
   final numbers = <int>[1, 2, 3, 5, 6, 7];
@@ -79,6 +90,39 @@ void main() {
   [1, 2, 3, 4].min(); // 1
   [1, 2, 3, 4].average(); // 2.5
   [1, 2, 3, 4].chunks(3); // [[1, 2, 3], [4]]
+
+  /* List<Future> */
+  final futures = [
+    Future.delayed(Duration(seconds: 1), () => 999),
+    Future.delayed(Duration(seconds: 3), () => "Last one"),
+    Future.value("Instant"),
+    Future.error("Boom!"),
+    Future.value(true),
+  ];
+
+  futures
+      .all(
+    delayMillis: 200, // optional stagger
+    onProgress: (done, total, current) {
+      print("Progress: $done/$total");
+    },
+    onAnySuccess: (value, index) {
+      print("Success [$index]: $value (${value.runtimeType})");
+    },
+    onAnyError: (error, stack, index) {
+      print("Failed [$index]: $error");
+    },
+  )
+      .then((List<dynamic> results) {
+    // results is List<dynamic> in exact original order
+    print(results);
+    // → [999, "Last one", "Instant", null, true]
+  });
+
+  // works the same as
+  Utils.futureAll(futures).then((List<dynamic> results) {
+    print(results);
+  });
 
   /* DateTime */
   DateTime now = DateTime.now();

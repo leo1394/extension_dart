@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'string.dart';
 
 num Function(dynamic) identity =
@@ -179,5 +181,64 @@ extension IterableFindExtension<E> on Iterable<E> {
       final start = i > len ? i - len : i;
       yield skip(start).take(chunkSize).toList();
     }
+  }
+}
+
+extension IterableFutureExtension<E> on Iterable<Future<E>> {
+  Future<List<E>> all({
+    void Function(int completed, int total, Map<int, dynamic> resultsSoFar)?
+        onProgress,
+    void Function(dynamic value, int index)? onAnySuccess,
+    void Function(Object error, StackTrace stackTrace, int index)? onAnyError,
+    int delayMillis = 0,
+  }) {
+    if (isEmpty) return Future.value(<E>[]);
+
+    final completer = Completer<List<E>>();
+    final results = <int, dynamic>{}; // This will be passed to onProgress
+    var completedCount = 0;
+
+    void _attachFuture(int lockedIndex) {
+      this.elementAt(lockedIndex).then((value) {
+        results[lockedIndex] = value;
+        try {
+          onAnySuccess?.call(value, lockedIndex);
+        } catch (e) {
+          print("Error in onSuccess: $e");
+        }
+      }, onError: (Object error, StackTrace stackTrace) {
+        results[lockedIndex] = null;
+        try {
+          onAnyError?.call(error, stackTrace, lockedIndex);
+        } catch (e) {
+          print("Error in onError: $e");
+        }
+      }).whenComplete(() {
+        completedCount++;
+        try {
+          onProgress?.call(completedCount, length, results);
+        } catch (e) {
+          print("Error in onProgress: $e");
+        }
+
+        if (completedCount == length) {
+          if (!completer.isCompleted) {
+            completer.complete(List.generate(length, (i) => results[i]));
+          }
+        }
+      });
+    }
+
+    for (var i = 0; i < length; i++) {
+      if (delayMillis > 0) {
+        Future.delayed(Duration(milliseconds: delayMillis)).then((_) {
+          _attachFuture(i);
+        });
+      } else {
+        _attachFuture(i);
+      }
+    }
+
+    return completer.future;
   }
 }

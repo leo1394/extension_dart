@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:extension_dart/extensions.dart';
+
 import 'extensions/num.dart';
 import 'extensions/date.dart';
 
@@ -152,6 +154,20 @@ class Utils {
         i = i.subtract(Duration(seconds: timeZoneDiff.inSeconds));
       }
     }
+  }
+
+  static Future<List<dynamic>> futureAll(
+    Iterable<Future> futures, {
+    void Function(int, int, Map<int, dynamic>)? onProgress,
+    void Function(dynamic, int)? onAnySuccess,
+    void Function(Object, StackTrace, int)? onAnyError,
+    int delayMillis = 0,
+  }) {
+    return futures.all(
+        onProgress: onProgress,
+        onAnySuccess: onAnySuccess,
+        onAnyError: onAnyError,
+        delayMillis: delayMillis);
   }
 
   /// Returns true if is yesterday, otherwise false

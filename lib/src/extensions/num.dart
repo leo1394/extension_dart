@@ -69,7 +69,7 @@ extension NumExtension<T extends num> on T {
   /// Converts a number representing total seconds into a time-formatted string.
   ///
   /// The number is treated as the total number of seconds.
-  /// Supports 'mm:SS' and 'HH:mm:SS' formats.
+  /// Supports 'mm:ss', and 'HH:mm:ss' formats.
   ///
   /// [format]: The desired output format. Defaults to 'mm:SS'.
   ///
@@ -81,13 +81,13 @@ extension NumExtension<T extends num> on T {
   /// int totalSeconds = 125;
   /// String formattedTime = totalSeconds.timer() ;  // '02:05'
   /// ```
-  String timer({String format = 'mm:SS'}) {
+  String timer({String format = 'mm:ss'}) {
     final seconds = this.toInt();
     int hrs = (seconds ~/ 3600);
     int mins = ((seconds % 3600) ~/ 60);
     int secs = (seconds % 60);
 
-    if (format == 'HH:mm:SS') {
+    if (format == 'HH:mm:ss') {
       return new Time(hrs, mins, secs).toString();
     }
     return '${mins.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
