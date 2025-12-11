@@ -1,5 +1,3 @@
-import 'dart:async';
-
 extension ListExtension<E> on List<E> {
   /// Split one large list to limited sub lists
   /// ```dart

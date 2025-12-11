@@ -1,9 +1,6 @@
 import 'dart:math';
 import 'package:extension_dart/extensions.dart';
 
-import 'extensions/num.dart';
-import 'extensions/date.dart';
-
 class Utils {
   /// Generate fast uuid with supports for prefix and with dashes or not
   static String fastUUID({String prefix = "", bool withDashes = true}) {
