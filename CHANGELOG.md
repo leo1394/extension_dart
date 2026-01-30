@@ -1,3 +1,6 @@
+## 1.0.8
+- `isEmpty` support for other data type
+
 ## 1.0.7
 - add `QueryParametersConversion` extension api for `Map`
 - `futureAll` support in `Utils`

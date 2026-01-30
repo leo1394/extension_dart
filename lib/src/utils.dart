@@ -12,12 +12,15 @@ class Utils {
     return prefix.isNotEmpty ? '$prefix-$formatted' : formatted;
   }
 
-  /// is null or empty for Map String, List
-  static bool isEmpty(dynamic obj) {
-    if (obj is String || obj is Map || obj is List) {
-      return obj == null || obj.isEmpty;
-    }
-    return true;
+  /// is null or empty for Map, String, Iterable
+  static bool isEmpty(dynamic value) {
+    if (value == null) return true;
+
+    if (value is String) return value.isEmpty;
+    if (value is Iterable) return value.isEmpty;
+    if (value is Map) return value.isEmpty;
+
+    return false;
   }
 
   /// unique for int, String, double List
