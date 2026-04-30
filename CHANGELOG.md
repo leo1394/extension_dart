@@ -1,3 +1,6 @@
+## 1.0.9
+- `unique` and `uniqueBy` support for `Iterable` and `List`
+
 ## 1.0.8
 - `isEmpty` support for other data type
 

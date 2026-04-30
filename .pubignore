@@ -32,6 +32,7 @@ _config.yml
 .pub-cache/
 .pub/
 build/
+.DS_Store
 
 # Android related
 **/android/**/gradle-wrapper.jar

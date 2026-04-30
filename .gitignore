@@ -4,6 +4,7 @@
 .idea/
 .flutter-plugins
 .flutter-plugins-dependencies
+.DS_Store
 
 
 # Avoid committing pubspec.lock for library packages; see

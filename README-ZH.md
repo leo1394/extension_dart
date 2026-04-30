@@ -120,12 +120,15 @@ print(value.fixed(decimals: 3, round: true)); // 3.142
 ### Iterable
 
 ```dart
-  final numbers = <int>[1, 2, 3, 5, 6, 7];
+  final numbers = <int>[1, 2, 3, 2, 5, 6, 7];
   var result = numbers.find((element) => element < 5); // 1
   result = numbers.find((element) => element > 5); // 6
   result = numbers.find((element) => element > 10); // null
   result = numbers.find((element) => element > 10, orElse: () => -1); // -1
   /// other api `findIndex` return index of target element, return -1 otherwise
+  
+  numbers.unique().toList(); // [1, 2, 3, 5, 6, 7]
+  numbers.uniqueBy((e) => e % 3).toList(); // [1, 2, 3]
 
   var numbers = [[1,2, [7,8]], [3,5]];
   print(numbers.flat()); // (1, 2, [7, 8], 3, 5)
