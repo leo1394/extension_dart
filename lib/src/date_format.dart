@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 /// Date format class for formatting dates
 class DateFormat {
   /// Format a DateTime using the pattern
@@ -132,29 +134,59 @@ class DateFormat {
     return weekdays[weekday - 1];
   }
 
-  // Predefined formatters
+  /// Formats a date as `y/M/d`.
   static String yMd([DateTime? datetime]) =>
       DateFormat.format(datetime, 'y/M/d');
+
+  /// Formats a date as `MMM d, y`.
   static String yMMMd([DateTime? datetime]) =>
       DateFormat.format(datetime, 'MMM d, y');
+
+  /// Formats a date as `EEEE, MMMM d, y`.
   static String yMMMMEEEEd([DateTime? datetime]) =>
       DateFormat.format(datetime, 'EEEE, MMMM d, y');
+
+  /// Formats a date as `EEE, MMM d, y`.
   static String yMMMEd([DateTime? datetime]) =>
       DateFormat.format(datetime, 'EEE, MMM d, y');
+
+  /// Formats a time as `H:mm:ss`.
   static String Hms([DateTime? datetime]) =>
       DateFormat.format(datetime, 'H:mm:ss');
+
+  /// Formats a time as `HH:mm:ss`.
   static String HHmmss([DateTime? datetime]) =>
       DateFormat.format(datetime, 'HH:mm:ss');
+
+  /// Formats a time as `H:mm`.
   static String Hm([DateTime? datetime]) => DateFormat.format(datetime, 'H:mm');
+
+  /// Formats a time as `h:mm:ss a`.
   static String hms([DateTime? datetime]) =>
       DateFormat.format(datetime, 'h:mm:ss a');
+
+  /// Formats a time as `h:mm a`.
   static String hm([DateTime? datetime]) =>
       DateFormat.format(datetime, 'h:mm a');
+
+  /// Formats a time as `m:ss`.
   static String ms([DateTime? datetime]) => DateFormat.format(datetime, 'm:ss');
+
+  /// Formats a date as a year.
   static String y([DateTime? datetime]) => DateFormat.format(datetime, 'y');
+
+  /// Formats a date as a month number.
   static String M([DateTime? datetime]) => DateFormat.format(datetime, 'M');
+
+  /// Formats a date as a day of month.
   static String d([DateTime? datetime]) => DateFormat.format(datetime, 'd');
+
+  /// Formats a time as a 24-hour clock hour.
   static String H([DateTime? datetime]) => DateFormat.format(datetime, 'H');
+
+  /// Formats a time as minutes.
   static String m([DateTime? datetime]) => DateFormat.format(datetime, 'm');
+
+  /// Formats a time as seconds.
   static String s([DateTime? datetime]) => DateFormat.format(datetime, 's');
 }

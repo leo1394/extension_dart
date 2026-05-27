@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_this
+
+/// Convenience methods for splitting, deduplicating, and reordering lists.
 extension ListExtension<E> on List<E> {
   /// Split one large list to limited sub lists
   /// ```dart
@@ -5,6 +8,9 @@ extension ListExtension<E> on List<E> {
   /// // => [[1, 2], [3, 4], [5, 6], [7, 8], [9]]
   /// ```
   List<List<E>> chunks(int chunkSize) {
+    if (chunkSize <= 0) {
+      throw RangeError.value(chunkSize, 'chunkSize', 'must be greater than 0');
+    }
     final chunks = <List<E>>[];
     final len = this.length;
     for (int i = 0; i < len; i += chunkSize) {
@@ -20,7 +26,7 @@ extension ListExtension<E> on List<E> {
   /// if two elements are equal. If [comparator] is null, it falls back to
   /// the default equality operator (==).
   ///
-  /// The [comparator] should return true if [a] and [b] are considered duplicates.
+  /// The [comparator] should return true if `a` and `b` are considered duplicates.
   List<E> unique([bool Function(E a, E b)? comparator]) {
     final List<E> result = [];
 
@@ -70,5 +76,38 @@ extension ListExtension<E> on List<E> {
     }
 
     return result;
+  }
+
+  /// Moves the element at [oldIndex] to [newIndex] in place.
+  void move(int oldIndex, int newIndex) {
+    RangeError.checkValidIndex(oldIndex, this, 'oldIndex');
+    RangeError.checkValueInInterval(newIndex, 0, length - 1, 'newIndex');
+
+    if (oldIndex == newIndex) return;
+    final item = removeAt(oldIndex);
+    insert(newIndex, item);
+  }
+
+  /// Inserts [separator] between every element and returns a new list.
+  List<E> separatedBy(E separator) {
+    if (length <= 1) return List<E>.from(this);
+
+    final result = <E>[];
+    for (var i = 0; i < length; i++) {
+      if (i > 0) result.add(separator);
+      result.add(this[i]);
+    }
+    return result;
+  }
+
+  /// Swaps two elements in place.
+  void swap(int indexA, int indexB) {
+    RangeError.checkValidIndex(indexA, this, 'indexA');
+    RangeError.checkValidIndex(indexB, this, 'indexB');
+
+    if (indexA == indexB) return;
+    final item = this[indexA];
+    this[indexA] = this[indexB];
+    this[indexB] = item;
   }
 }

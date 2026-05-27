@@ -1,10 +1,14 @@
+// ignore_for_file: avoid_shadowing_type_parameters, no_leading_underscores_for_local_identifiers, unnecessary_this
+
 import 'dart:async';
 
 import 'string.dart';
 
+/// Converts numeric-like values to [num], returning `0` when conversion fails.
 num Function(dynamic) identity =
     (dynamic e) => e is num ? e : (e.toString().numeric() ?? 0);
 
+/// Convenience methods for searching, grouping, sorting, and aggregating iterables.
 extension IterableFindExtension<E> on Iterable<E> {
   /// find the first element that satisfies the given predicate [test].
   ///
@@ -51,7 +55,7 @@ extension IterableFindExtension<E> on Iterable<E> {
       index++;
       if (test(element)) return index;
     }
-    return 0;
+    return -1;
   }
 
   /// Flats each element of this [Iterable] into zero or more elements.
@@ -94,7 +98,7 @@ extension IterableFindExtension<E> on Iterable<E> {
   /// if two elements are equal. If [comparator] is null, it falls back to
   /// the default equality operator (==).
   ///
-  /// The [comparator] should return true if [a] and [b] are considered duplicates.
+  /// The [comparator] should return true if `a` and `b` are considered duplicates.
   Iterable<E> unique([bool Function(E a, E b)? comparator]) {
     final List<E> result = [];
 
@@ -149,7 +153,7 @@ extension IterableFindExtension<E> on Iterable<E> {
   /// Returns the sum of all the values in this iterable, as defined by
   /// [addend].
   ///
-  /// Returns 0 if [this] is empty.
+  /// Returns 0 if this iterable is empty.
   ///
   /// Example:
   /// ```dart
@@ -165,7 +169,7 @@ extension IterableFindExtension<E> on Iterable<E> {
   /// Returns the average of all the values in this iterable, as defined by
   /// [value].
   ///
-  /// Returns null if [this] is empty.
+  /// Returns null if this iterable is empty.
   ///
   /// Example:
   /// ```dart
@@ -177,6 +181,66 @@ extension IterableFindExtension<E> on Iterable<E> {
     if (this.isEmpty) return null;
 
     return this.sum(value) / this.length;
+  }
+
+  /// Returns the first element, or null if this iterable is empty.
+  E? get firstOrNull => isEmpty ? null : first;
+
+  /// Returns the last element, or null if this iterable is empty.
+  E? get lastOrNull => isEmpty ? null : last;
+
+  /// Returns the element at [index], or null if [index] is out of range.
+  E? elementAtOrNull(int index) {
+    if (index < 0) return null;
+    var currentIndex = 0;
+    for (final element in this) {
+      if (currentIndex == index) return element;
+      currentIndex++;
+    }
+    return null;
+  }
+
+  /// Counts elements that satisfy [test].
+  int count([bool Function(E element)? test]) {
+    if (test == null) return length;
+    var result = 0;
+    for (final element in this) {
+      if (test(element)) result++;
+    }
+    return result;
+  }
+
+  /// Groups elements by a key produced from each element.
+  Map<K, List<E>> groupBy<K>(K Function(E element) keySelector) {
+    final result = <K, List<E>>{};
+    for (final element in this) {
+      (result[keySelector(element)] ??= <E>[]).add(element);
+    }
+    return result;
+  }
+
+  /// Returns a map keyed by [keySelector].
+  ///
+  /// Later elements overwrite earlier ones when keys are duplicated.
+  Map<K, E> associateBy<K>(K Function(E element) keySelector) {
+    final result = <K, E>{};
+    for (final element in this) {
+      result[keySelector(element)] = element;
+    }
+    return result;
+  }
+
+  /// Returns a sorted list using the comparable value from [selector].
+  List<E> sortedBy<T extends Comparable<dynamic>>(
+    T Function(E element) selector, {
+    bool descending = false,
+  }) {
+    final result = toList();
+    result.sort((a, b) {
+      final compared = selector(a).compareTo(selector(b));
+      return descending ? -compared : compared;
+    });
+    return result;
   }
 
   /// Returns the element with the maximum value in the iterable.
@@ -197,7 +261,10 @@ extension IterableFindExtension<E> on Iterable<E> {
 
     for (var element in skip(1)) {
       num current = value(element);
-      if (current > maxValue) maxElement = element;
+      if (current > maxValue) {
+        maxElement = element;
+        maxValue = current;
+      }
     }
 
     return maxElement;
@@ -221,7 +288,10 @@ extension IterableFindExtension<E> on Iterable<E> {
 
     for (var element in skip(1)) {
       num current = value(element);
-      if (current < minValue) minElement = element;
+      if (current < minValue) {
+        minElement = element;
+        minValue = current;
+      }
     }
 
     return minElement;
@@ -233,16 +303,23 @@ extension IterableFindExtension<E> on Iterable<E> {
   /// // => [[1, 2], [3, 4], [5, 6], [7, 8], [9]]
   /// ```
   Iterable<List<E>> chunks(int chunkSize) sync* {
+    if (chunkSize <= 0) {
+      throw RangeError.value(chunkSize, 'chunkSize', 'must be greater than 0');
+    }
     final len = this.length;
 
     for (int i = 0; i < len; i += chunkSize) {
-      final start = i > len ? i - len : i;
-      yield skip(start).take(chunkSize).toList();
+      yield skip(i).take(chunkSize).toList();
     }
   }
 }
 
+/// Convenience methods for awaiting an iterable of futures with progress hooks.
 extension IterableFutureExtension<E> on Iterable<Future<E>> {
+  /// Waits for every future and returns results in the original order.
+  ///
+  /// Errors are reported through [onAnyError] and represented as `null` in the
+  /// returned result list.
   Future<List<E>> all({
     void Function(int completed, int total, Map<int, dynamic> resultsSoFar)?
         onProgress,

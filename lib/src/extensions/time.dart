@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_to_list_in_spreads
+
 import 'package:meta/meta.dart';
 import 'num.dart';
 
@@ -206,6 +208,7 @@ class Time implements Comparable<Time> {
   /// Returns `true` if `this` is before or the same as [other] and `false` otherwise.
   bool operator <=(Time other) => compareTo(other) <= 0;
 
+  /// Returns `true` if [other] represents the same time of day.
   @override
   bool operator ==(Object other) => other is Time && compareTo(other) == 0;
 
@@ -215,6 +218,7 @@ class Time implements Comparable<Time> {
   /// Returns `true` if `this` is after [other] and `false` otherwise.
   bool operator >(Time other) => compareTo(other) > 0;
 
+  /// Compares this time to [other].
   @override
   int compareTo(Time other) {
     var result = hour.compareTo(other.hour);
@@ -245,6 +249,7 @@ class Time implements Comparable<Time> {
     return 0;
   }
 
+  /// Returns a hash code based on the microsecond value of this time.
   @override
   int get hashCode => inMicroseconds;
 
@@ -267,6 +272,7 @@ class Time implements Comparable<Time> {
     return microseconds;
   }
 
+  /// Returns this time formatted as `HH:mm:ss.ffffff`.
   @override
   String toString() =>
       '${hour.padLeft(2)}:${minute.padLeft(2)}:${second.padLeft(2)}.${(millisecond * 1000 + microsecond).padLeft(6)}';

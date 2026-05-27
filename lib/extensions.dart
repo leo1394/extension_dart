@@ -4,7 +4,6 @@
 library;
 
 export 'src/extensions/date.dart';
-export 'src/extensions/double.dart';
 export 'src/extensions/iterable.dart';
 export 'src/extensions/list.dart';
 export 'src/extensions/map.dart';

@@ -1,11 +1,16 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 import 'package:extension_dart/extensions.dart';
 
+/// General-purpose helpers shared by extension methods and package consumers.
 class Utils {
+  static final Random _random = Random();
+
   /// Generate fast uuid with supports for prefix and with dashes or not
   static String fastUUID({String prefix = "", bool withDashes = true}) {
     final chars = '0123456789abcdef';
-    final uuid = List.generate(32, (i) => chars[Random().nextInt(16)]).join();
+    final uuid = List.generate(32, (i) => chars[_random.nextInt(16)]).join();
     final formatted = withDashes
         ? '${uuid.substring(0, 8)}-${uuid.substring(8, 12)}-${uuid.substring(12, 16)}-${uuid.substring(16, 20)}-${uuid.substring(20)}'
         : uuid;
@@ -28,17 +33,154 @@ class Utils {
     if (isEmpty(q1) && isEmpty(q2)) {
       return <T>[];
     }
-    List<T> arr = q1 ?? [];
-    arr.addAll(q2 ?? []);
-    if (T != int &&
-        T != String &&
-        T != double &&
-        arr.first is int &&
-        arr.first is String &&
-        arr.first is double) {
-      return arr;
-    }
+    final arr = <T>[...?q1, ...?q2];
     return Set<T>.from(arr).toList();
+  }
+
+  /// Generate a random string.
+  static String randomString(
+    int length, {
+    String chars =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+  }) {
+    if (length < 0) {
+      throw RangeError.value(length, 'length', 'must not be negative');
+    }
+    if (chars.isEmpty) {
+      throw ArgumentError.value(chars, 'chars', 'must not be empty');
+    }
+
+    return List.generate(length, (_) => chars[_random.nextInt(chars.length)])
+        .join();
+  }
+
+  /// Returns [value] when it can be JSON-decoded, otherwise null.
+  static dynamic tryJsonDecode(String? value) {
+    if (value == null) return null;
+    try {
+      return jsonDecode(value);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Returns a JSON string, or null when [value] cannot be encoded.
+  static String? tryJsonEncode(dynamic value) {
+    try {
+      return jsonEncode(value);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Returns a query string built from [parameters].
+  static String queryString(Map<String, dynamic> parameters) {
+    return Uri(queryParameters: parameters.asQueryParameters).query;
+  }
+
+  /// Removes null values from maps and lists recursively.
+  static dynamic removeNullValues(dynamic value) {
+    if (value is Map) {
+      final result = <dynamic, dynamic>{};
+      value.forEach((key, item) {
+        if (item != null) {
+          result[key] = removeNullValues(item);
+        }
+      });
+      return result;
+    }
+
+    if (value is List) {
+      return value.where((item) => item != null).map(removeNullValues).toList();
+    }
+
+    return value;
+  }
+
+  /// Deep merges [source] into [target].
+  static Map<K, dynamic> deepMerge<K>(
+    Map<K, dynamic> target,
+    Map<K, dynamic> source,
+  ) {
+    final result = Map<K, dynamic>.from(target);
+    source.forEach((key, value) {
+      final current = result[key];
+      if (current is Map && value is Map) {
+        result[key] = deepMerge<dynamic>(
+          Map<dynamic, dynamic>.from(current),
+          Map<dynamic, dynamic>.from(value),
+        );
+      } else {
+        result[key] = value;
+      }
+    });
+
+    return result;
+  }
+
+  /// Retries an async [action] until it succeeds or [retries] is exhausted.
+  static Future<T> retry<T>(
+    Future<T> Function() action, {
+    int retries = 3,
+    Duration delay = Duration.zero,
+    bool Function(Object error)? retryIf,
+  }) async {
+    if (retries < 0) {
+      throw RangeError.value(retries, 'retries', 'must not be negative');
+    }
+
+    var attempt = 0;
+    while (true) {
+      try {
+        return await action();
+      } catch (error) {
+        final shouldRetry = attempt < retries && (retryIf?.call(error) ?? true);
+        if (!shouldRetry) rethrow;
+        attempt++;
+        if (delay > Duration.zero) {
+          await Future<void>.delayed(delay);
+        }
+      }
+    }
+  }
+
+  /// Debounces repeated calls and runs only the latest action.
+  static void Function() debounce(
+    void Function() action, {
+    Duration delay = const Duration(milliseconds: 300),
+  }) {
+    Timer? timer;
+    return () {
+      timer?.cancel();
+      timer = Timer(delay, action);
+    };
+  }
+
+  /// Throttles repeated calls to at most once per [duration].
+  static void Function() throttle(
+    void Function() action, {
+    Duration duration = const Duration(milliseconds: 300),
+  }) {
+    DateTime? lastRun;
+    return () {
+      final now = DateTime.now();
+      if (lastRun == null || now.difference(lastRun!) >= duration) {
+        lastRun = now;
+        action();
+      }
+    };
+  }
+
+  /// Deep equality for lists, maps, and primitive values.
+  static bool deepEquals(dynamic value1, dynamic value2) {
+    if (identical(value1, value2)) return true;
+    if (value1 is List && value2 is List) {
+      return areListsEqual(value1, value2);
+    }
+    if (value1 is Map && value2 is Map) {
+      return areMapsEqual(value1, value2);
+    }
+    return value1 == value2;
   }
 
   /// pickup target attributes for Map, List
@@ -135,7 +277,7 @@ class Utils {
   /// Yesterday at same hour / minute / second than now
   static DateTime get yesterday => DateTime.now().previousDay;
 
-  /// Current date (Same as [Date.now])
+  /// Current date (same as `DateTime.now()`).
   static DateTime get today => DateTime.now();
 
   /// Returns a [DateTime] for each day the given range.
@@ -156,6 +298,10 @@ class Utils {
     }
   }
 
+  /// Waits for all [futures] and returns results in the original order.
+  ///
+  /// Delegates to the iterable future extension and supports progress,
+  /// success, error, and staggered start callbacks.
   static Future<List<dynamic>> futureAll(
     Iterable<Future> futures, {
     void Function(int, int, Map<int, dynamic>)? onProgress,

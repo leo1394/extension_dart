@@ -1,11 +1,12 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:extension_dart/extensions.dart';
 import 'package:extension_dart/utils.dart';
 
 void main() {
   /* Double */
   double value = 3.1415926;
-  print(value.fixed(decimals: 3)); // 3.141
-  print(value.fixed(decimals: 3, round: true)); // 3.142
+  print(value.fixed(3)); // 3.141
 
   /* Num */
   print((4783484).thousands()); // '4,783,484'

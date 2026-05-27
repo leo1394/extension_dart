@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings, prefer_is_empty, unnecessary_this
+
 import 'dart:convert';
 
 import 'date.dart';
@@ -14,6 +16,7 @@ final RegExp _ipv4Regex = RegExp(
 final RegExp _ipv6Regex = RegExp(
     r'^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])))$');
 
+/// Null-safe validation, parsing, formatting, and conversion helpers for strings.
 extension StringExtension on String? {
   /// Returns true if string is a valid email address
   bool get isEmail => this != null && _emailRegex.hasMatch(this!.toLowerCase());
@@ -38,6 +41,24 @@ extension StringExtension on String? {
 
   /// Returns true if string is not empty
   bool get isNotEmpty => this != null && this!.length > 0;
+
+  /// Returns true if string is null, empty, or only whitespace.
+  bool get isBlank => this == null || this!.trim().isEmpty;
+
+  /// Returns true if string has at least one non-whitespace character.
+  bool get isNotBlank => !isBlank;
+
+  /// Returns this string, or an empty string when it is null.
+  String get orEmpty => this ?? '';
+
+  /// Returns a trimmed string, or an empty string when it is null.
+  String get trimmed => this?.trim() ?? '';
+
+  /// Returns null when this string is null, empty, or only whitespace.
+  String? get nullIfBlank {
+    final value = this?.trim();
+    return value == null || value.isEmpty ? null : value;
+  }
 
   /// Validates URL query string (handles ? & # fragments, allows empty values)
   bool get isQuery {
@@ -90,7 +111,7 @@ extension StringExtension on String? {
     return sum % 10 == 0;
   }
 
-  /// Returns `true` if [id] is a valid Chinese resident ID number.
+  /// Returns `true` if this string is a valid Chinese resident ID number.
   bool get isChineseIdNumber {
     if (this == null) {
       return false;
@@ -229,7 +250,7 @@ extension StringExtension on String? {
       this != null && (num.tryParse(this!) != null || this.numeric() != null);
 
   /// Returns double 0.564 from string percentage like "56.4%"
-  /// Parse [source] as a double literal and return its value.
+  /// Parses this string as a double literal and returns its value.
   num? numeric() {
     if (this == null) {
       return null;
@@ -382,6 +403,9 @@ extension StringExtension on String? {
   /// '12345'.chunks(2); // ['12', '34', '5']
   /// ```
   List<String> chunks(int chunkSize) {
+    if (chunkSize <= 0) {
+      throw RangeError.value(chunkSize, 'chunkSize', 'must be greater than 0');
+    }
     final chunks = <String>[];
     if (this == null) {
       return chunks;
@@ -404,6 +428,9 @@ extension StringExtension on String? {
   /// 'Hello'.bytesChunks(2) ;  // [[72, 101], [108, 108], [111]]
   /// ```
   List<List<int>> bytesChunks(int chunkSize) {
+    if (chunkSize <= 0) {
+      throw RangeError.value(chunkSize, 'chunkSize', 'must be greater than 0');
+    }
     final chunks = <List<int>>[];
     if (this == null) {
       return chunks;
@@ -438,13 +465,78 @@ extension StringExtension on String? {
   /// This is a convenient alias for `string.codeUnits`.
   List<int> bytes() => this == null ? [] : this!.codeUnits;
 
-  /// Returns string with capitalized first letter
+  /// Returns string with capitalized first letter.
+  ///
+  /// Set [allWords] to true to capitalize every word separated by whitespace.
   ///
   /// Example:
   /// ```dart
-  /// assert('test'.capitalizeFirstLetter(), 'Test');
+  /// 'test'.capitalize(); // 'Test'
+  /// 'hello world'.capitalize(allWords: true); // 'Hello World'
   /// ```
-  String capitalize() => this != null && this!.isNotEmpty
-      ? '${this![0].toUpperCase()}${this!.substring(1)}'
-      : "";
+  String capitalize({bool allWords = false}) {
+    if (this == null || this!.isEmpty) return "";
+
+    if (!allWords) {
+      return '${this![0].toUpperCase()}${this!.substring(1)}';
+    }
+
+    if (this.isBlank) return '';
+
+    return trimmed
+        .split(RegExp(r'\s+'))
+        .map((word) =>
+            '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}')
+        .join(' ');
+  }
+
+  /// Returns true if this string contains [other], ignoring letter case.
+  bool containsIgnoreCase(String other) {
+    if (this == null) return false;
+    return this!.toLowerCase().contains(other.toLowerCase());
+  }
+
+  /// Returns a copy of this string with all whitespace removed.
+  String removeWhitespace() =>
+      this == null ? '' : this!.replaceAll(RegExp(r'\s+'), '');
+
+  /// Returns only the numeric digits from this string.
+  String onlyDigits() =>
+      this == null ? '' : this!.replaceAll(RegExp(r'[^0-9]'), '');
+
+  /// Returns this string reversed by rune.
+  String reverse() =>
+      this == null ? '' : String.fromCharCodes(this!.runes.toList().reversed);
+
+  /// Limits this string to [maxLength] and appends [ellipsis] when truncated.
+  String limit(int maxLength, {String ellipsis = '...'}) {
+    if (maxLength < 0) {
+      throw RangeError.value(maxLength, 'maxLength', 'must not be negative');
+    }
+    if (this == null || this!.length <= maxLength) return this ?? '';
+    if (maxLength <= ellipsis.length) {
+      return ellipsis.substring(0, maxLength);
+    }
+    return '${this!.substring(0, maxLength - ellipsis.length)}$ellipsis';
+  }
+
+  /// Masks the characters from [start] to [end] with [mask].
+  String mask({
+    int start = 0,
+    int? end,
+    String mask = '*',
+  }) {
+    if (this == null || this!.isEmpty) return '';
+    if (mask.isEmpty) {
+      throw ArgumentError.value(mask, 'mask', 'must not be empty');
+    }
+
+    final value = this!;
+    final safeStart = start.clamp(0, value.length).toInt();
+    final safeEnd =
+        (end ?? value.length).clamp(safeStart, value.length).toInt();
+    final masked = List.filled(safeEnd - safeStart, mask).join();
+
+    return '${value.substring(0, safeStart)}$masked${value.substring(safeEnd)}';
+  }
 }

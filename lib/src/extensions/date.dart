@@ -1,7 +1,55 @@
+// ignore_for_file: unnecessary_this
+
 import '../date_format.dart';
 import '../utils.dart';
 import 'time.dart';
 
+DateTime _copyDateTime(
+  DateTime source, {
+  int? year,
+  int? month,
+  int? day,
+  int? hour,
+  int? minute,
+  int? second,
+  int? millisecond,
+  int? microsecond,
+}) {
+  final values = [
+    year ?? source.year,
+    month ?? source.month,
+    day ?? source.day,
+    hour ?? source.hour,
+    minute ?? source.minute,
+    second ?? source.second,
+    millisecond ?? source.millisecond,
+    microsecond ?? source.microsecond,
+  ];
+
+  return source.isUtc
+      ? DateTime.utc(
+          values[0],
+          values[1],
+          values[2],
+          values[3],
+          values[4],
+          values[5],
+          values[6],
+          values[7],
+        )
+      : DateTime(
+          values[0],
+          values[1],
+          values[2],
+          values[3],
+          values[4],
+          values[5],
+          values[6],
+          values[7],
+        );
+}
+
+/// Convenience methods for working with [DateTime] values.
 extension DateExtension on DateTime {
   /// Returns the end of Current date
   DateTime get endOfDay {
@@ -82,6 +130,30 @@ extension DateExtension on DateTime {
         microsecond,
       );
 
+  /// Add a certain amount of minutes to this date
+  DateTime addMinutes(int amount) => add(Duration(minutes: amount));
+
+  /// Add a certain amount of seconds to this date
+  DateTime addSeconds(int amount) => add(Duration(seconds: amount));
+
+  /// Add a certain amount of months to this date and clamp overflow days.
+  DateTime addMonths(int amount) {
+    final totalMonths = year * 12 + month - 1 + amount;
+    final targetYear = totalMonths ~/ 12;
+    final targetMonth = totalMonths % 12 + 1;
+    final maxDay = DateTime(targetYear, targetMonth + 1, 0).day;
+
+    return _copyDateTime(
+      this,
+      year: targetYear,
+      month: targetMonth,
+      day: day > maxDay ? maxDay : day,
+    );
+  }
+
+  /// Add a certain amount of years to this date and clamp overflow days.
+  DateTime addYears(int amount) => addMonths(amount * 12);
+
   /// The day after this [DateTime]
   DateTime get nextDay => addDays(1);
 
@@ -91,6 +163,19 @@ extension DateExtension on DateTime {
   /// Whether or not two times are on the same day.
   bool isSameDay(DateTime b) =>
       year == b.year && month == b.month && day == b.day;
+
+  /// Whether or not two dates are in the same month.
+  bool isSameMonth(DateTime b) => year == b.year && month == b.month;
+
+  /// Whether or not two dates are in the same year.
+  bool isSameYear(DateTime b) => year == b.year;
+
+  /// Returns true when this date is Saturday or Sunday.
+  bool get isWeekend =>
+      weekday == DateTime.saturday || weekday == DateTime.sunday;
+
+  /// Returns true when this date is Monday through Friday.
+  bool get isWeekday => !isWeekend;
 
   /// The list of days in a given month
   List<DateTime> get daysInMonth {
@@ -118,6 +203,24 @@ extension DateExtension on DateTime {
 
   /// Returns the first day of a given month
   DateTime get firstDayOfMonth => DateTime(this.year, this.month);
+
+  /// Returns the start of the current month.
+  DateTime get startOfMonth => firstDayOfMonth.startOfDay;
+
+  /// Returns the end of the current month.
+  DateTime get endOfMonth => lastDayOfMonth.endOfDay;
+
+  /// Returns the first day of the current year.
+  DateTime get firstDayOfYear => DateTime(year);
+
+  /// Returns the last day of the current year.
+  DateTime get lastDayOfYear => DateTime(year, 12, 31);
+
+  /// Returns the start of the current year.
+  DateTime get startOfYear => firstDayOfYear.startOfDay;
+
+  /// Returns the end of the current year.
+  DateTime get endOfYear => lastDayOfYear.endOfDay;
 
   /// Returns the first day of week
   DateTime get firstDayOfWeek {
@@ -200,5 +303,24 @@ extension DateExtension on DateTime {
     final max = a.isBefore(b) ? b : a;
     final result = max.weekday % 7 - min.weekday % 7 >= 0;
     return result;
+  }
+
+  /// Returns the whole day difference from this date to [other].
+  int daysUntil(DateTime other) => other.dateOnly.difference(dateOnly).inDays;
+
+  /// Returns true if this date is between [start] and [end].
+  bool isBetween(
+    DateTime start,
+    DateTime end, {
+    bool includeStart = true,
+    bool includeEnd = true,
+  }) {
+    if (start.isAfter(end)) {
+      throw ArgumentError.value(start, 'start', 'must be before end');
+    }
+
+    final afterStart = includeStart ? !isBefore(start) : isAfter(start);
+    final beforeEnd = includeEnd ? !isAfter(end) : isBefore(end);
+    return afterStart && beforeEnd;
   }
 }

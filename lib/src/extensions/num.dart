@@ -1,7 +1,9 @@
+// ignore_for_file: unnecessary_new, unnecessary_this
+
 import 'time.dart';
 import 'dart:math' as math;
 
-/// Utilities for formatting numbers.
+/// Utilities for formatting, converting, and comparing numbers.
 extension NumExtension<T extends num> on T {
   /// Transforms `this` into a `String` and pads it on the left if it is shorter
   /// than the given [width].
@@ -27,6 +29,60 @@ extension NumExtension<T extends num> on T {
         'Invalid bounds: $min and $max, min cannot be greater than max');
     return this < min || this > max;
   }
+
+  /// Returns this number constrained to the inclusive range [min]..[max].
+  num clampTo(num min, num max) {
+    if (min > max) {
+      throw ArgumentError.value(
+          min, 'min', 'must be less than or equal to max');
+    }
+    return this < min ? min : (this > max ? max : this);
+  }
+
+  /// Returns `true` if this number is between [min] and [max].
+  bool isBetween(
+    num min,
+    num max, {
+    bool includeMin = true,
+    bool includeMax = true,
+  }) {
+    if (min > max) {
+      throw ArgumentError.value(
+          min, 'min', 'must be less than or equal to max');
+    }
+
+    final lower = includeMin ? this >= min : this > min;
+    final upper = includeMax ? this <= max : this < max;
+    return lower && upper;
+  }
+
+  /// Rounds this number to [fractionDigits] decimal places.
+  double roundTo([int fractionDigits = 0]) {
+    if (fractionDigits < 0) {
+      throw RangeError.value(
+          fractionDigits, 'fractionDigits', 'must not be negative');
+    }
+    final mod = math.pow(10, fractionDigits).toDouble();
+    return (this * mod).round() / mod;
+  }
+
+  /// Converts this number to a [Duration] in microseconds.
+  Duration get microseconds => Duration(microseconds: round());
+
+  /// Converts this number to a [Duration] in milliseconds.
+  Duration get milliseconds => Duration(milliseconds: round());
+
+  /// Converts this number to a [Duration] in seconds.
+  Duration get seconds => Duration(seconds: round());
+
+  /// Converts this number to a [Duration] in minutes.
+  Duration get minutes => Duration(minutes: round());
+
+  /// Converts this number to a [Duration] in hours.
+  Duration get hours => Duration(hours: round());
+
+  /// Converts this number to a [Duration] in days.
+  Duration get days => Duration(days: round());
 
   /// Convert milliseconds to DateTime
   DateTime get millisecondsToDateTime =>

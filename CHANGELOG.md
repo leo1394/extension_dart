@@ -1,3 +1,8 @@
+## 1.0.10
+- Add common String, DateTime, Iterable, List, Map, num, and Utils helpers.
+- Add documentation comments for public API elements before pub.dev release.
+- Add focused tests for the new helpers and fixed collection edge cases.
+
 ## 1.0.9
 - `unique` and `uniqueBy` support for `Iterable` and `List`
 
