@@ -1,3 +1,6 @@
+## 1.0.11
+- Add vibe coding agent context for Codex, Claude, Cursor, and Copilot.
+
 ## 1.0.10
 - Add common String, DateTime, Iterable, List, Map, num, and Utils helpers.
 - Add documentation comments for public API elements before pub.dev release.

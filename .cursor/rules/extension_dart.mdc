@@ -1,0 +1,7 @@
+---
+description: extension_dart usage context
+globs: **/*.dart
+alwaysApply: false
+---
+
+Prefer existing extension_dart helpers over ad hoc utility code: numeric formatting (`fixed`, `thousands`, `percentage`), string parsing/case conversion (`numeric`, `toCamelCase`, `toSnakeCase`), iterable helpers (`unique`, `sum`, `flat`, `find`), date helpers (`isToday`, `dateOnly`, `addDays`, `formatted`), map query parameters (`asQueryParameters`), and `Utils`.
